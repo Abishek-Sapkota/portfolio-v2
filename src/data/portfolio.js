@@ -82,7 +82,16 @@ export const profile = {
       end_date: null,
       description:
         'Developing and maintaining backend services with Django and Django REST Framework, with a focus on scalable APIs, reliable data models, and production-ready delivery. Also work on the React and TypeScript frontends those APIs serve, from feature work to tracking down state-scoping bugs across the two sides.',
-      technologies: tech('Celery', 'DRF', 'Django', 'Docker', 'PostgreSQL', 'React', 'Redis', 'TypeScript'),
+      technologies: tech(
+        'Celery',
+        'DRF',
+        'Django',
+        'Docker',
+        'PostgreSQL',
+        'React',
+        'Redis',
+        'TypeScript',
+      ),
     },
     {
       id: 2,
@@ -135,15 +144,23 @@ export const projects = [
     short_description:
       'A Django backend that answers student questions from uploaded lesson material using retrieval-augmented generation.',
     problem:
-      'A student asking about their own syllabus gets generic answers from a general-purpose chatbot, with no grounding in the lesson material the course actually uses — and no way for a teacher to control what the tutor draws on.',
+      'A student revising for an exam asks a general-purpose chatbot about their own syllabus and gets a confident answer drawn from somewhere else entirely. The teacher who set that syllabus has no say in what the tutor may draw on, and no way to tell whether a given answer came from the course material or from the model’s own guesswork.',
     solution:
-      'Built a Django REST backend that ingests lesson content with topic and grade metadata, embeds it with sentence-transformers, indexes it in FAISS for semantic retrieval, and answers questions through LangChain and Hugging Face models using only the retrieved context. Tutor personas are configurable, and the service is deployed under Gunicorn behind Nginx.',
+      'A tutoring service that answers only from lesson material a teacher has uploaded and labeled by topic and grade. A question is matched against that material first, and the reply is assembled from what was found rather than from the model’s general knowledge, so any answer can be traced back to the passage behind it. The tutor’s voice and level are configurable, letting the same material be explained differently to a younger class.',
     challenges:
-      'Keeping answers anchored to the retrieved passages rather than the model’s own priors, and fitting embedding and vector-index work into a request cycle Django could serve.',
+      'Keeping the tutor honest. A model asked something the material does not cover will answer anyway, and a reply that sounds authoritative while coming from outside the syllabus is worse for a student than no reply at all.',
     learnings:
-      'A retrieval pipeline is mostly a data-modeling problem: how content is chunked and tagged decides answer quality far more than which model sits at the end of the chain.',
+      'Answer quality was settled long before the model saw the question. How the material was divided up and labeled mattered far more than which model sat at the end of the chain, which makes this largely a content problem rather than a modeling one.',
     thumbnail: null,
-    tech_stack: tech('Django', 'DRF', 'LangChain', 'FAISS', 'Sentence-Transformers', 'Hugging Face', 'Gunicorn'),
+    tech_stack: tech(
+      'Django',
+      'DRF',
+      'LangChain',
+      'FAISS',
+      'Sentence-Transformers',
+      'Hugging Face',
+      'Gunicorn',
+    ),
     github_url: 'https://github.com/Abishek-Sapkota/EduRAG',
     live_url: '',
     is_featured: false,
@@ -156,13 +173,13 @@ export const projects = [
     short_description:
       'A delivery platform backend that isolates every business customer in its own PostgreSQL schema.',
     problem:
-      'A delivery platform serving several business customers has to keep each one’s data strictly separate, without running and maintaining a separate deployment per customer.',
+      'A delivery platform signs up several businesses, and each one assumes its orders, customers and couriers are nobody else’s concern. Honoring that by running a separate installation per client means every fix and every upgrade has to be repeated as many times as there are clients.',
     solution:
-      'Built a Django REST service using django-tenants for per-tenant schema isolation on PostgreSQL, with JWT authentication, filterable endpoints, tenant, user and delivery concerns split into separate apps, environment-driven configuration, and Docker Compose plus Fabric scripts for deployment.',
+      'One deployment that keeps each business’s records in a compartment of its own, so a query written for one client cannot reach another client’s data even by mistake. Accounts sign in against their own compartment, and the code handling businesses, people and deliveries is kept separate so each can change without disturbing the others.',
     challenges:
-      'Routing every request to the correct tenant schema while keeping the apps themselves unaware of which tenant they were serving.',
+      'Every request had to arrive at the right compartment before any code touched the data, while the features themselves stayed unaware that compartments existed at all.',
     learnings:
-      'Schema-per-tenant isolation is worth its migration complexity: it removes an entire category of cross-tenant data leaks from application code, where they are easy to introduce and hard to notice.',
+      'Isolation enforced beneath the application is worth the ceremony it adds to upgrades. It removes a kind of mistake that is easy to make during ordinary feature work and very hard to catch in review.',
     thumbnail: null,
     tech_stack: tech('Django', 'DRF', 'PostgreSQL', 'Django Tenants', 'JWT', 'Docker'),
     github_url: 'https://github.com/Abishek-Sapkota/delivery-service',
@@ -177,13 +194,13 @@ export const projects = [
     short_description:
       'A ride sharing REST API that verifies riders by phone, vets drivers by document, and matches trips by distance.',
     problem:
-      'Riders and drivers need a dependable way to find each other for a trip, on a platform where an unverified account on either side is a safety problem rather than a support ticket.',
+      'On a ride sharing platform an unverified account is not a support ticket, it is a stranger in someone’s car. Riders and drivers need a dependable way to find each other for a trip, and a reason to believe the person at the other end is who the app says they are.',
     solution:
-      'Built a Django REST API where the phone number is the identity and is confirmed by one-time code, drivers are vetted through uploaded citizenship and ID documents, trips carry origin and destination places through an open-to-complete status lifecycle, and nearby matching is computed from geodesic distance with geopy. Profile and document images are stored in Cloudinary.',
+      'A booking service built around identity. A rider’s phone number is their account and has to be confirmed before they can travel; a driver additionally submits identity documents and is vetted before taking anyone anywhere. Each trip moves through a defined lifecycle from open to complete, and riders are matched to drivers by how far away they actually are.',
     challenges:
-      'Matching riders to nearby drivers as reported locations changed, without a spatial database to query against.',
+      'Drivers move while they wait. Matching a rider to the nearest one meant working from reported positions that were already out of date by the time the request was answered.',
     learnings:
-      'Distance matching with geopy is quick to build but recomputes on every request; a spatial index such as PostGIS is what makes that pattern scale beyond a small fleet.',
+      'Measuring the distance to every available driver on every request is the obvious first version and the one that stops working as the fleet grows. Location is a specialized kind of data, and it eventually wants a database that understands it as such.',
     thumbnail: null,
     tech_stack: tech('Django', 'DRF', 'JWT', 'GeoPy', 'Cloudinary', 'Gunicorn'),
     github_url: 'https://github.com/Abishek-Sapkota/hikeit',
@@ -198,15 +215,22 @@ export const projects = [
     short_description:
       'A community platform where students share reading material, trade textbooks, and chat in real time.',
     problem:
-      'Students lacked one focused space for sharing academic resources, discussing them as they read, and passing textbooks on to the next year’s cohort.',
+      'Course reading gets passed around in group chats, the questions about it get asked somewhere else, and last year’s textbooks sit in a cupboard while this year’s cohort buys new ones. Students had no single place where the material, the conversation about it, and the books themselves lived together.',
     solution:
-      'Developed a Django platform where students publish reading materials and list books to buy and sell, with real-time chat served over Django Channels and Daphne alongside the standard request/response pages, and uploaded images handled through Cloudinary.',
+      'A student community with three things happening in one place: reading material published and discussed, textbooks listed for sale to the next cohort, and conversation that arrives live while a page stays open. The discussion side and the marketplace side are built as separate halves of the same site, so each can grow without complicating the other.',
     challenges:
-      'Running WebSocket chat and conventional page rendering inside one Django project over ASGI.',
+      'Live conversation and ordinary page loads want different things from a server. Getting both to work inside one application, without a second system running alongside it, was most of the work.',
     learnings:
-      'Keeping the community app and the marketplace app separate made each easier to extend, since a change to listings never had to reason about the chat consumers.',
+      'Drawing a hard line between the community half and the marketplace half kept both cheap to change. A change to book listings never had to reason about what the chat was doing.',
     thumbnail: null,
-    tech_stack: tech('Django', 'Django Channels', 'WebSockets', 'Daphne', 'Cloudinary', 'JavaScript'),
+    tech_stack: tech(
+      'Django',
+      'Django Channels',
+      'WebSockets',
+      'Daphne',
+      'Cloudinary',
+      'JavaScript',
+    ),
     github_url: 'https://github.com/Abishek-Sapkota/forum',
     live_url: '',
     is_featured: true,
@@ -219,13 +243,13 @@ export const projects = [
     short_description:
       'An HTTP endpoint that returns a likely condition from reported symptoms using a trained classifier.',
     problem:
-      'A trained classifier is useless to an application while it lives in a notebook: it needs a stable interface, a versioned artifact, and somewhere to run.',
+      'A model that predicts well in a researcher’s notebook is worth nothing to anyone until an application can ask it a question. Getting it there means agreeing on what a question looks like, what the answer means, and where the thing runs once the researcher closes their laptop.',
     solution:
-      'Wrapped a scikit-learn model in a Django service that accepts reported symptoms over HTTP and returns a prediction from a set of just over forty conditions, loading the serialized model artifact with joblib at startup and enabling CORS so a browser client can call it directly.',
+      'A small service that takes a set of reported symptoms and returns the most likely condition from a list of just over forty. The trained model is treated as a released artifact rather than a file someone had lying around: it is loaded once when the service starts, and the service can be called straight from a browser so a front end can be built against it without anything in between.',
     challenges:
-      'Keeping the serialized model artifact and the serving code in step as the model was retrained.',
+      'The model kept being retrained. Each new version had to be picked up by the running service without the two drifting into disagreement about what the inputs meant.',
     learnings:
-      'Serving a model is mostly an interface problem: validate inputs at the boundary and version the artifact alongside the code that loads it.',
+      'Serving a model is mostly a question of contracts rather than statistics. Check the inputs at the front door and version the model alongside the code that loads it, or you will eventually be investigating a prediction nobody can reproduce.',
     thumbnail: null,
     tech_stack: tech('Django', 'scikit-learn', 'NumPy', 'SciPy', 'Joblib'),
     github_url: 'https://github.com/Abishek-Sapkota/Disease-PredictionAPI',
@@ -243,15 +267,26 @@ export const projects = [
     short_description:
       'A multi-department helpdesk backend where a user’s access to a ticket is derived from their relationship to it, with real-time comments and notifications.',
     problem:
-      'A support desk spanning several departments needs two things a flat role table cannot express: each department defining its own intake fields, and a person’s access to a ticket depending on their relationship to that specific ticket — reporter, assignee, watcher, concerned party — rather than on one global role.',
+      'A support desk spanning several departments runs into two things a simple list of job titles cannot express. Each department wants to ask its own questions when a ticket is raised, and a person’s right to see a ticket depends on their relationship to that particular ticket. The same employee may be the reporter on one, the assignee on another, and a bystander on a third they should not see at all.',
     solution:
-      'Wrote 208 of the 229 commits on this Django 6 / DRF backend. Authorization asks one question of each ticket, most-privileged relation first: what is this user to it? Every DRF permission class reads that answer instead of re-deriving department membership itself. Departments define their own intake fields through a dynamic field registry backed by JSON. Every change to a ticket is recorded with its old and new value, alongside the django-auditlog entry it came from. Threaded comments carry read receipts and go out over Django Channels WebSockets, as do notifications, which Celery also mails according to each user’s quiet hours and digest setting. Attachments are generic relations, swept periodically for orphans. Sign-in runs through Keycloak or domain-allowlisted Google OAuth, and unfamiliar devices are recognized by hashed IP and GeoIP before the account owner gets an alert.',
+      'Wrote 208 of the 229 commits on this helpdesk backend. Access is decided by asking one question of each ticket, most-privileged relationship first: what is this person to it? Every rule then reads that single answer instead of working it out again for itself. Departments define their own intake questions without needing a developer, every edit to a ticket is kept with what it was before and after, and comments and notifications arrive live, with email following each person’s quiet hours and digest preference. Sign-in runs through the organization’s identity provider, and a login from an unfamiliar device is flagged to the account owner before it is trusted.',
     challenges:
-      'The permission checks were correct but expensive — resolving a role against a ticket touched department membership, watchers and concerned users for every object, so list endpoints multiplied queries per row.',
+      'The access rules were correct and far too expensive. Establishing one person’s standing on one ticket meant checking several kinds of membership, so a page listing fifty tickets did that work fifty times over and slowed to a crawl.',
     learnings:
-      'Resolving the role once per ticket and handing that answer to every permission class kept the query count flat as the role matrix grew, and made the rules readable enough to argue about.',
+      'Settling someone’s standing once per ticket and handing that answer to every rule that needed it kept the cost flat as the rules multiplied. It also left the rules plain enough that people could argue about them productively, which mattered as much as the speed did.',
     thumbnail: null,
-    tech_stack: tech('Django', 'DRF', 'PostgreSQL', 'Celery', 'Redis', 'Django Channels', 'WebSockets', 'Keycloak', 'Docker', 'S3'),
+    tech_stack: tech(
+      'Django',
+      'DRF',
+      'PostgreSQL',
+      'Celery',
+      'Redis',
+      'Django Channels',
+      'WebSockets',
+      'Keycloak',
+      'Docker',
+      'S3',
+    ),
     github_url: '',
     live_url: '',
     is_featured: true,
@@ -264,15 +299,26 @@ export const projects = [
     short_description:
       'A school reporting platform that assembles multi-page PDF report cards for a whole grade from marks, attendance, co-curricular records and generated graphs.',
     problem:
-      'A report card is not one table. Each one pulls marks per subject variation, attendance, co-curricular activities, coordinator remarks and generated performance graphs into a single multi-page document, and an entire grade has to be produced in one run, on deadline.',
+      'A report card looks like a document and behaves like a small database. One card gathers marks for every subject a student took, their attendance, their co-curricular record, a coordinator’s remarks and charts of their progress. An entire grade has to be produced together, correctly, in the days before parents expect it.',
     solution:
-      'Contributed roughly 200 commits over two years to the Django platform behind it. Built the Excel marks import: sheet metadata validation, per-student skip rules for unassigned subjects, symbol-number checks and structured error responses for invalid rows. Also worked across the report generation and publish pipeline, which runs as Celery tasks that render documents with WeasyPrint, draw performance-analysis graphs with Matplotlib, and store output in S3-compatible object storage. Also wrote permission classes for the report tracker and the section and semester scoping behind the marks views.',
+      'Contributed roughly 200 commits over two years to the platform behind it. Built the route by which a school’s existing marks spreadsheets become records the system trusts: the sheet is checked before anything is taken from it, students who never sat a subject are skipped rather than failed, and a bad row comes back naming what was wrong with it instead of sinking the whole upload. Also worked across the pipeline that assembles and publishes the finished cards in the background, and on the rules deciding who may see which section’s results.',
     challenges:
-      'Generating a grade’s worth of cards reissued the same nested queries for every student, and the save path wrote rows one at a time, so whole-grade runs timed out.',
+      'Producing a whole grade repeated the same lookups for every student and saved each result one row at a time. Runs that had to be finished by a deadline instead ran until they gave up.',
     learnings:
-      'Moving the filtering inside the prefetches, and replacing per-row saves with bulk_create and bulk_update, turned a whole-grade run from a timeout into a background job that finishes.',
+      'The answer was not a faster machine but fewer round trips: gather what the whole batch needs up front, then write the results together. A job that used to time out became one that finishes quietly in the background.',
     thumbnail: null,
-    tech_stack: tech('Django', 'DRF', 'PostgreSQL', 'Celery', 'Redis', 'WeasyPrint', 'Matplotlib', 'openpyxl', 'Django Channels', 'Docker'),
+    tech_stack: tech(
+      'Django',
+      'DRF',
+      'PostgreSQL',
+      'Celery',
+      'Redis',
+      'WeasyPrint',
+      'Matplotlib',
+      'openpyxl',
+      'Django Channels',
+      'Docker',
+    ),
     github_url: '',
     live_url: '',
     is_featured: true,
@@ -285,15 +331,26 @@ export const projects = [
     short_description:
       'A certificate issuing backend where every certificate carries a verifiable link and QR code, and issuers can see how recipients actually reached it.',
     problem:
-      'A digital certificate is worth little if the recipient cannot prove it is genuine and the issuer cannot tell whether anyone ever looked at it.',
+      'A digital certificate is only as good as the two questions people ask of it. The person holding it needs to prove it is genuine, and the organization that issued it wants to know whether anyone ever looked.',
     solution:
-      'Joined the Django 6 backend to build certificate template CRUD, with placeholder definitions imported from spreadsheets, plus the QR generation endpoint and the analytics behind the verification page. Visits are attributed to one of four sources: an email click, a QR scan, a plain link, or anything else. A denormalized per-source counter answers the cheap question of how many, while a raw event log carrying device and geography answers when and from where. Also built the LinkedIn sharing flow. An opaque per-certificate token is what reveals the share options at all, the OAuth exchange is cached server-side against a single-use state key, and the recipient edits the caption before anything is posted. Replaced the project’s hand-rolled Keycloak app with the shared authentication package.',
+      'Joined the backend to build the parts surrounding the certificate itself. Issuers design templates and fill them from a spreadsheet of recipients, and every certificate carries a link and a scannable code leading to a page that confirms it is real. That page reports how people arrived, telling an email click apart from a scanned code apart from a plain shared link, with running totals for the quick question and a detailed record behind them for the specific one. Also built sharing to LinkedIn, where the recipient reads and edits the wording before anything is posted in their name, and replaced the project’s own sign-in code with the shared authentication package.',
     challenges:
-      'Concurrent visits to the same certificate lost counter increments, and arbitrary query parameters on the verification URL could create unbounded rows in the per-source counter table.',
+      'Two people opening the same certificate at the same moment could each miss the other’s visit, and a link with junk appended to it could invent new categories in the tally.',
     learnings:
-      'An F() update fixes the lost increments, and clamping utm_source to the four known values is what stops a query string from inventing counter rows. Keeping the event log append-only meant the totals never had to be recomputed from it.',
+      'A number that several people increase at once has to be increased by the database, not by an application reading it and writing it back. Keeping the detailed record append-only meant the totals never had to be rebuilt from it to be believed.',
     thumbnail: null,
-    tech_stack: tech('Django', 'DRF', 'PostgreSQL', 'Celery', 'Redis', 'Keycloak', 'LinkedIn OAuth', 'Django Channels', 'Docker', 'S3'),
+    tech_stack: tech(
+      'Django',
+      'DRF',
+      'PostgreSQL',
+      'Celery',
+      'Redis',
+      'Keycloak',
+      'LinkedIn OAuth',
+      'Django Channels',
+      'Docker',
+      'S3',
+    ),
     github_url: '',
     live_url: '',
     is_featured: false,
@@ -306,15 +363,24 @@ export const projects = [
     short_description:
       'A reusable Django/DRF package implementing Keycloak authentication with the Backend-For-Frontend pattern, so tokens and client secrets never reach the browser.',
     problem:
-      'An SPA talking directly to Keycloak has to hold tokens in the browser and, for the authorization code exchange, a client secret it cannot keep secret.',
+      'An application running in a browser and talking straight to an identity provider ends up holding two things it cannot protect: the user’s credentials for every onward request, and a secret it is meant to keep secret while shipping it to every visitor.',
     solution:
-      'A packaged Django app, published to a private index and used by several services, that makes the backend the only party talking to Keycloak. It runs the code exchange server-side, hands the frontend a short-lived single-use code to redeem for a session, proxies refreshes so the client secret never leaves the server, and validates every access token against Keycloak’s JWKS with cached public keys. It ships both a DRF authentication class and a Django authentication backend, provisions users on first login, and is fully typed. Contributed the session handling: an independent login token per device set as a cookie, a rework of the login signals and their signature, an opt-out flag so a service can authenticate without having its user record overwritten, and handling for claim-to-user mismatches in the default provisioning path.',
+      'A reusable package, published internally and adopted by several services, that moves the entire conversation with the identity provider behind the server. The browser never receives a token or a secret; it trades a short-lived, single-use code for a session and leaves renewals to the server. Contributed the session handling: an independent session per device rather than one per account, a rework of the login events other services hook into, and an opt-out for services that consider their own user records authoritative.',
     challenges:
-      'The same account signing in from several devices had to yield an independent session per device, without re-provisioning the user or overwriting fields the consuming service considered its own.',
+      'One person signing in from a phone and a laptop had to end up with two independent sessions, without the second sign-in quietly overwriting details the consuming service treated as its own.',
     learnings:
-      'Every service that adopted the package disagreed about which system owned user data. The additions that earned their place were the ones that let a service turn something off: a flag to skip user updates, and processors it could override.',
+      'Every service that adopted the package disagreed about who owned user data. The additions that earned their place were the ones letting a service switch behavior off, not the ones adding more behavior.',
     thumbnail: null,
-    tech_stack: tech('Django', 'DRF', 'Keycloak', 'OAuth 2.0', 'OIDC', 'PyJWT', 'drf-spectacular', 'Hatchling'),
+    tech_stack: tech(
+      'Django',
+      'DRF',
+      'Keycloak',
+      'OAuth 2.0',
+      'OIDC',
+      'PyJWT',
+      'drf-spectacular',
+      'Hatchling',
+    ),
     github_url: '',
     live_url: '',
     is_featured: false,
@@ -327,15 +393,25 @@ export const projects = [
     short_description:
       'A schema-isolated multi-tenant task manager with workspaces, recurring tasks and GitLab commits linked back to the tasks they mention.',
     problem:
-      'One deployment serving many client organizations cannot let a single query leak across them. Inside a tenant, the same people still need work partitioned by workspace and project.',
+      'One installation serving many client organizations cannot let a single query wander across them. Within any one client, the same people still need their work divided by team and project, or everybody sees everything.',
     solution:
-      'Contributed to the Django backend, which gives each client its own PostgreSQL schema through django-tenants, then partitions work inside a tenant by workspace, project and status. Recurrence is stored as an rrule configuration, validated per frequency, and expanded nightly by a Celery task that clones a template task with its many-to-many properties intact. A GitLab webhook ingests push events, pulls task codes out of commit messages, and links the commits to the tasks they mention. My share was smaller: a workspace-scoping bug where a task 404ed while a different workspace was active, a backfill of task descriptions, a fix to the daily summary digest, and removing the bespoke status-update endpoint by folding its logic into the standard update path behind a signal.',
+      'Contributed to the backend of a task manager that keeps each client organization’s data in a compartment of its own, then divides the work inside it by workspace, project and status. Work that repeats is described once and created afresh each night. Commits pushed to the team’s repositories are matched to the tasks their messages mention, so the work and the record of it stay attached. My share was the smaller part: a bug where a task disappeared depending on which workspace was open, a backfill of missing descriptions, a fix to the daily summary, and the removal of a redundant second way to change a task’s status.',
     challenges:
-      'A task reachable under one workspace returned 404 when another workspace was active, because the scoping filter and the object lookup disagreed about which workspace applied.',
+      'A task was reachable from one workspace and reported missing from another, because the filter deciding what was visible and the lookup fetching the task disagreed about which workspace applied.',
     learnings:
-      'The bespoke status endpoint had drifted from the general update path, so the same change behaved differently depending on which one the client called. Moving status onto the default path and reacting with a signal ended that whole class of bug report.',
+      'A second, special-purpose way to do something ordinary will drift from the first one. Folding status changes back onto the normal path ended a recurring kind of bug report rather than fixing one instance of it.',
     thumbnail: null,
-    tech_stack: tech('Django', 'DRF', 'django-tenants', 'PostgreSQL', 'Celery', 'Redis', 'Django Channels', 'GitLab Webhooks', 'Docker'),
+    tech_stack: tech(
+      'Django',
+      'DRF',
+      'django-tenants',
+      'PostgreSQL',
+      'Celery',
+      'Redis',
+      'Django Channels',
+      'GitLab Webhooks',
+      'Docker',
+    ),
     github_url: '',
     live_url: '',
     is_featured: false,
@@ -348,15 +424,23 @@ export const projects = [
     short_description:
       'A proof-of-concept Django service that delegates sign-in to Keycloak over OIDC and provisions each new user into a central IAM API.',
     problem:
-      'Before several services could hand identity over to a central Keycloak-backed IAM, someone had to establish two things concretely: how OIDC claims map onto a Django user, and which direction user records should flow.',
+      'Before a group of services could hand identity over to a central system, two questions needed concrete answers rather than opinions: what an account from the identity provider becomes inside each application, and which side owns the user’s record once both have one.',
     solution:
-      'A deliberately small Django service that answered both. It subclasses the mozilla-django-oidc backend to map incoming claims onto the user model, and pushes newly created users into the IAM users API from a post_save signal, deriving the role list IAM requires from the user’s Django group membership and tagging each request with tenant and application codes through a thin requests.Session client.',
+      'A deliberately small service built to answer both and nothing else. It signs people in against the central provider, decides how the details that come back map onto a local account, and registers each new account with the central directory as it is created, working out the permissions that directory demands from the groups the person already belongs to.',
     challenges:
-      'IAM rejects a user created without a role, so Django group membership had to be translated into IAM roles at the moment of creation rather than synced afterwards.',
+      'The central directory refuses to create a user with no role attached, so local group membership had to be translated into roles at the moment of creation rather than reconciled afterwards.',
     learnings:
-      'Both questions were cheaper to answer in a service nobody depended on. Deriving IAM roles from Django groups is the mapping the production services ended up using.',
+      'Both questions were far cheaper to answer inside something nobody depended on yet. The mapping this prototype settled on is the one the production services went on to use, which is the whole return on having built it.',
     thumbnail: null,
-    tech_stack: tech('Django', 'DRF', 'Keycloak', 'OIDC', 'mozilla-django-oidc', 'python-keycloak', 'PyJWT'),
+    tech_stack: tech(
+      'Django',
+      'DRF',
+      'Keycloak',
+      'OIDC',
+      'mozilla-django-oidc',
+      'python-keycloak',
+      'PyJWT',
+    ),
     github_url: '',
     live_url: '',
     is_featured: false,
@@ -369,15 +453,24 @@ export const projects = [
     short_description:
       'A multi-tenant courier platform split across more than forty Django services, one per stage of the delivery chain.',
     problem:
-      'A courier operation is a chain of handoffs. An order becomes a pickup request, joins a manifest, gets assigned to a runsheet, is loaded onto a vehicle, and ends as a delivery or a return to the vendor. Each stage has its own rules and its own rate of change, so keeping the whole chain in one deployment means a pricing tweak in one stage redeploys all of them.',
+      'A courier operation is a chain of handoffs. An order becomes a pickup request, joins a manifest, is assigned to a route, is loaded onto a vehicle, and ends as either a delivery or a journey back to the vendor. Each link has its own rules and changes at its own pace, so running the chain as a single system means a change to pricing puts the entire delivery network at risk.',
     solution:
-      'Worked on the platform as a backend developer at Careinfo Solutions. Each stage of the chain owns its own Django service — order, pickup request, manifest, runsheet, vehicle loading, delivery, and RTV for returns — with fleet, location, inventory, invoice, accounting, customer and merchant services beside them, and shared services for notifications, SMS and email, push, webhooks, caching and scheduled task running. Services call each other over REST and hand off longer work through Celery. Rather than reach across a boundary to read, each service keeps local tables for the entities it only consumes: tenant, user, branch, customer, merchant, fleet, location, order and status. Materialized views cover the reads that had to stay cheap regardless. My own work was on the APIs across these services, PostgreSQL schema and query optimization, Redis caching, and deployments on EC2, S3 and RDS.',
+      'Worked on the platform as a backend developer at Careinfo Solutions. Each stage of the chain is a service of its own: orders, pickups, manifests, routes, vehicle loading, delivery and returns, alongside services for the fleet, locations, inventory, invoicing, accounts, customers and merchants, plus shared services for notifications and scheduled work. Rather than reach across a boundary every time it needs a customer or a branch, each service keeps its own copy of the details it only ever reads. My own work was on the interfaces between these services, the database schemas and queries underneath them, caching, and the deployments.',
     challenges:
-      'Every service needed customer, merchant, branch and status records it did not own. Fetching them from the owning service per request would have made one delivery lookup depend on six services being healthy at once.',
+      'Every service needed customer, merchant, branch and status details it did not own. Fetching each one from its owner on demand would have left a single delivery lookup depending on six other services being healthy at that moment.',
     learnings:
-      'Keeping a local read copy in each service costs storage and a synchronization path to maintain. What it buys is a service that can still answer while the service owning that data is mid-redeploy.',
+      'A local copy of somebody else’s data costs storage and buys independence: the service can still answer while the service that owns that data is mid-redeploy. The price is a synchronization path you are then responsible for keeping honest.',
     thumbnail: null,
-    tech_stack: tech('Django', 'DRF', 'Microservices', 'PostgreSQL', 'Celery', 'Redis', 'Docker', 'AWS'),
+    tech_stack: tech(
+      'Django',
+      'DRF',
+      'Microservices',
+      'PostgreSQL',
+      'Celery',
+      'Redis',
+      'Docker',
+      'AWS',
+    ),
     github_url: '',
     live_url: '',
     is_featured: true,
