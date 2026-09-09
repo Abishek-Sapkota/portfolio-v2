@@ -1,0 +1,5 @@
+import { Mail, MapPin } from 'lucide-react'
+import ContactForm from '../components/ContactForm'
+import PageMeta from '../components/PageMeta'
+import Reveal from '../components/Reveal'
+export default function Contact(){return <><PageMeta title="Contact" description="Start a conversation about a Django or backend engineering project."/><div className="shell grid gap-16 py-20 sm:py-32 lg:grid-cols-[.8fr_1.2fr]"><header><span className="eyebrow">Contact / Open channel</span><h1 className="section-title mt-7">Let’s make<br/><span className="text-accent">something useful.</span></h1><p className="prose-copy mt-8">Have an API, SaaS platform, or backend workflow that needs a careful engineer? Tell me where things stand.</p><div className="mt-12 space-y-4 font-mono text-xs"><a href="mailto:abishek.sapkota2020@gmail.com" data-cursor="email" className="flex items-center gap-3 hover:text-accent"><Mail size={16}/> abishek.sapkota2020@gmail.com</a><p className="flex items-center gap-3 text-muted"><MapPin size={16}/> Dhungedhara, Kathmandu · Remote worldwide</p></div></header><Reveal className="rule-card p-7 sm:p-10"><ContactForm/></Reveal></div></>}

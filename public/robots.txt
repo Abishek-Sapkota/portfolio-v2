@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://abisheksapkota.com.np/sitemap.xml
