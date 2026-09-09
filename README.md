@@ -49,7 +49,6 @@ and the project case studies with their tech stacks and galleries.
 - `profile.experience` and `profile.education` render newest first; `end_date: null` displays as "Now".
 - Each project needs a unique `slug`, which becomes its URL at `/projects/<slug>`. Add the same slug to `public/sitemap.xml` so the new page gets indexed.
 - `is_featured` selects which projects appear on the home page; `order` sets the sequence on `/projects`.
-- Gallery `source` values are plain URLs. To ship images with the site, drop them in `public/` and reference them as `/my-image.jpg`.
 
 Edit the file, save, and the dev server reloads. The module's shape mirrors the
 JSON the previous REST API returned, which is why the page components did not
@@ -109,7 +108,6 @@ equivalent rewrite in `vercel.json`.
 
 ## Launch checklist
 
-- Swap the placeholder Unsplash gallery images in `src/data/portfolio.js` for real project screenshots.
 - Confirm the SPA rewrite works by refreshing a project detail page on the deployed site.
 - Verify the contact form opens a correctly pre-filled email.
 

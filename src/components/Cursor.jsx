@@ -17,22 +17,29 @@ export default function Cursor(){
   const [pressed, setPressed] = useState(false)
   const x = useMotionValue(-100)
   const y = useMotionValue(-100)
-  const ringX = useSpring(x, { damping: 30, stiffness: 400, mass: .4 })
-  const ringY = useSpring(y, { damping: 30, stiffness: 400, mass: .4 })
+  const ringX = useSpring(x, { damping: 26, stiffness: 850, mass: .18 })
+  const ringY = useSpring(y, { damping: 26, stiffness: 850, mass: .18 })
 
   useEffect(() => {
     if (reduced || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
     document.documentElement.classList.add('custom-cursor')
-    const move = (e) => {
-      x.set(e.clientX); y.set(e.clientY)
-      setActive(true)
-      const t = e.target
+    let frame = 0, target = null
+    const inspect = () => {
+      frame = 0
+      const t = target
+      if (!(t instanceof Element)) return
       setInvert(!!t.closest(INVERT_SELECTOR))
       const labeled = t.closest('[data-cursor]')
       if (labeled) { setWord(labeled.dataset.cursor); setTextMode(false) }
       else if (t.closest(INTERACTIVE_SELECTOR)) { setWord('click'); setTextMode(false) }
       else if (t.closest(TEXT_SELECTOR)) { setWord(null); setTextMode(true) }
       else { setWord(null); setTextMode(false) }
+    }
+    const move = (e) => {
+      x.set(e.clientX); y.set(e.clientY)
+      setActive(true)
+      target = e.target
+      if (!frame) frame = requestAnimationFrame(inspect)
     }
     const down = () => setPressed(true)
     const up = () => setPressed(false)
@@ -42,6 +49,7 @@ export default function Cursor(){
     window.addEventListener('mouseup', up)
     document.addEventListener('mouseleave', leave)
     return () => {
+      if (frame) cancelAnimationFrame(frame)
       document.documentElement.classList.remove('custom-cursor')
       window.removeEventListener('mousemove', move)
       window.removeEventListener('mousedown', down)
@@ -65,7 +73,7 @@ export default function Cursor(){
         {word && <span className="px-1.5 font-mono text-[10px] font-semibold uppercase leading-tight tracking-wide" style={{ color: textColor }}>{word}</span>}
       </motion.div>
     </motion.div>
-    {!word && !textMode && <motion.div aria-hidden="true" className="pointer-events-none fixed left-0 top-0 z-[999]" style={{ x: ringX, y: ringY }}>
+    {!word && !textMode && <motion.div aria-hidden="true" className="pointer-events-none fixed left-0 top-0 z-[999]" style={{ x, y }}>
       <div className="-translate-x-1/2 -translate-y-1/2 size-[5px] rounded-full" style={{ backgroundColor: fill }} />
     </motion.div>}
   </>

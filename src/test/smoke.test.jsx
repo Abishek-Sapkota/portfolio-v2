@@ -13,7 +13,6 @@ import { featuredProjects, profile, projects } from '../data/portfolio'
 const onHome=featuredProjects.slice(0,4)
 const countBy=(name)=>projects.filter(p=>p.tech_stack.some(t=>t.name===name)).length
 const uniqueTech=[...new Set(projects.flatMap(p=>p.tech_stack.map(t=>t.name)))].find(n=>countBy(n)===1)
-const withGallery=projects.find(p=>p.gallery.length>0)
 
 const at = (path, element, route = path) => render(
   <HelmetProvider><MemoryRouter initialEntries={[path]}><Routes><Route path={route} element={element}/></Routes></MemoryRouter></HelmetProvider>
@@ -62,13 +61,8 @@ test.each(projects.map(p=>[p.slug,p]))('project detail renders the %s case study
     expect(screen.getByRole('link',{name:/Source code/})).toHaveAttribute('href',project.github_url)
   else
     expect(screen.queryByRole('link',{name:/Source code/})).not.toBeInTheDocument()
-  expect(screen.queryAllByRole('img')).toHaveLength(project.gallery.length)
-})
-
-test('project detail renders gallery images when a project has them', () => {
-  expect(withGallery).toBeDefined()
-  at(`/projects/${withGallery.slug}`, <ProjectDetail/>, '/projects/:slug')
-  expect(screen.getByRole('img')).toHaveAttribute('src', withGallery.gallery[0].source)
+  // The detail page is deliberately image-free.
+  expect(screen.queryAllByRole('img')).toHaveLength(0)
 })
 
 test('project detail shows a not-found state for an unknown slug', () => {

@@ -148,7 +148,6 @@ export const projects = [
     live_url: '',
     is_featured: false,
     order: 4,
-    gallery: [],
   },
   {
     id: 3,
@@ -170,7 +169,6 @@ export const projects = [
     live_url: '',
     is_featured: false,
     order: 5,
-    gallery: [],
   },
   {
     id: 4,
@@ -192,15 +190,6 @@ export const projects = [
     live_url: '',
     is_featured: false,
     order: 6,
-    gallery: [
-      {
-        id: 1,
-        source:
-          'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80',
-        alt_text: 'RideSharing Application product interface',
-        order: 0,
-      },
-    ],
   },
   {
     id: 5,
@@ -222,15 +211,6 @@ export const projects = [
     live_url: '',
     is_featured: true,
     order: 3,
-    gallery: [
-      {
-        id: 2,
-        source:
-          'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80',
-        alt_text: 'Student Forum product interface',
-        order: 0,
-      },
-    ],
   },
   {
     id: 6,
@@ -252,7 +232,6 @@ export const projects = [
     live_url: '',
     is_featured: false,
     order: 7,
-    gallery: [],
   },
   // Professional work at INGTech. These are private, internally hosted
   // repositories, so no `github_url` is available; each entry describes only
@@ -277,7 +256,6 @@ export const projects = [
     live_url: '',
     is_featured: true,
     order: 0,
-    gallery: [],
   },
   {
     id: 8,
@@ -299,7 +277,6 @@ export const projects = [
     live_url: '',
     is_featured: true,
     order: 1,
-    gallery: [],
   },
   {
     id: 9,
@@ -321,7 +298,6 @@ export const projects = [
     live_url: '',
     is_featured: false,
     order: 8,
-    gallery: [],
   },
   {
     id: 10,
@@ -343,7 +319,6 @@ export const projects = [
     live_url: '',
     is_featured: false,
     order: 9,
-    gallery: [],
   },
   {
     id: 11,
@@ -365,7 +340,6 @@ export const projects = [
     live_url: '',
     is_featured: false,
     order: 10,
-    gallery: [],
   },
   {
     id: 12,
@@ -387,7 +361,6 @@ export const projects = [
     live_url: '',
     is_featured: false,
     order: 11,
-    gallery: [],
   },
   {
     id: 13,
@@ -409,7 +382,6 @@ export const projects = [
     live_url: '',
     is_featured: true,
     order: 2,
-    gallery: [],
   },
 ].sort((a, b) => a.order - b.order)
 
