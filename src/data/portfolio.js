@@ -10,8 +10,8 @@ const tech = (...names) => names.map((name) => ({ name, icon: '' }))
 export const profile = {
   name: 'Abishek Sapkota',
   title: 'Software Engineer',
-  tagline: 'Building secure, scalable backend systems with Django & Django REST Framework',
-  bio: 'I’m a software engineer focused on clean, scalable APIs and practical systems. My experience includes authentication, multi-tenant SaaS architecture, PostgreSQL query optimization, Celery background tasks, Redis caching, and Jinja templates. I also build and maintain the React and TypeScript frontends that sit in front of those APIs. I also deploy and operate applications on AWS using EC2, S3, and RDS, with an emphasis on security, flexibility, and maintainable architecture.',
+  tagline: 'I build secure backend systems with Django and Django REST Framework.',
+  bio: 'I’m a software engineer, mostly on the backend. Most of my work is Django APIs: authentication, multi-tenant SaaS, PostgreSQL queries that need to get faster, Celery jobs, Redis caching and the odd Jinja template. I also build the React and TypeScript frontends that sit on top of those APIs, and I deploy and run things on AWS (EC2, S3, RDS). I care most about security and about code the next person can maintain.',
   avatar: null,
   resume: null,
   email: 'abishek.sapkota2020@gmail.com',
@@ -81,7 +81,7 @@ export const profile = {
       start_date: '2025-10-01',
       end_date: null,
       description:
-        'Developing and maintaining backend services with Django and Django REST Framework, with a focus on scalable APIs, reliable data models, and production-ready delivery. Also work on the React and TypeScript frontends those APIs serve, from feature work to tracking down state-scoping bugs across the two sides.',
+        'Building and maintaining backend services in Django and Django REST Framework, mostly APIs and the data models behind them. I also work on the React and TypeScript frontends those APIs serve, from new features to state-scoping bugs that cross both sides.',
       technologies: tech(
         'Celery',
         'DRF',
@@ -100,7 +100,7 @@ export const profile = {
       start_date: '2024-03-01',
       end_date: '2025-09-30',
       description:
-        'Developed scalable APIs for a multi-tenant SaaS platform, split core functionality into Django microservices communicating through REST and Celery, optimized PostgreSQL schemas and queries, automated AWS deployments across EC2, S3, and RDS, and introduced Redis caching.',
+        'Built APIs for a multi-tenant SaaS platform and helped split its core into Django microservices that talk over REST and Celery. Also tuned PostgreSQL schemas and queries, automated the AWS deployments (EC2, S3, RDS) and added Redis caching.',
       technologies: tech('Celery', 'DRF', 'Django', 'Docker', 'PostgreSQL', 'Redis'),
     },
   ],
@@ -269,7 +269,7 @@ export const projects = [
     problem:
       'A support desk spanning several departments runs into two things a simple list of job titles cannot express. Each department wants to ask its own questions when a ticket is raised, and a person’s right to see a ticket depends on their relationship to that particular ticket. The same employee may be the reporter on one, the assignee on another, and a bystander on a third they should not see at all.',
     solution:
-      'Wrote 208 of the 229 commits on this helpdesk backend. Access is decided by asking one question of each ticket, most-privileged relationship first: what is this person to it? Every rule then reads that single answer instead of working it out again for itself. Departments define their own intake questions without needing a developer, every edit to a ticket is kept with what it was before and after, and comments and notifications arrive live, with email following each person’s quiet hours and digest preference. Sign-in runs through the organization’s identity provider, and a login from an unfamiliar device is flagged to the account owner before it is trusted.',
+      'Access is decided by asking one question of each ticket, most-privileged relationship first: what is this person to it? Every rule then reads that single answer instead of working it out again for itself. Departments define their own intake questions without needing a developer, every edit to a ticket is kept with what it was before and after, and comments and notifications arrive live, with email following each person’s quiet hours and digest preference. Sign-in runs through the organization’s identity provider, and a login from an unfamiliar device is flagged to the account owner before it is trusted.',
     challenges:
       'The access rules were correct and far too expensive. Establishing one person’s standing on one ticket meant checking several kinds of membership, so a page listing fifty tickets did that work fifty times over and slowed to a crawl.',
     learnings:
@@ -301,7 +301,7 @@ export const projects = [
     problem:
       'A report card looks like a document and behaves like a small database. One card gathers marks for every subject a student took, their attendance, their co-curricular record, a coordinator’s remarks and charts of their progress. An entire grade has to be produced together, correctly, in the days before parents expect it.',
     solution:
-      'Contributed roughly 200 commits over two years to the platform behind it. Built the route by which a school’s existing marks spreadsheets become records the system trusts: the sheet is checked before anything is taken from it, students who never sat a subject are skipped rather than failed, and a bad row comes back naming what was wrong with it instead of sinking the whole upload. Also worked across the pipeline that assembles and publishes the finished cards in the background, and on the rules deciding who may see which section’s results.',
+      'Worked on the platform behind it for two years. Built the route by which a school’s existing marks spreadsheets become records the system trusts: the sheet is checked before anything is taken from it, students who never sat a subject are skipped rather than failed, and a bad row comes back naming what was wrong with it instead of sinking the whole upload. Also worked across the pipeline that assembles and publishes the finished cards in the background, and on the rules deciding who may see which section’s results.',
     challenges:
       'Producing a whole grade repeated the same lookups for every student and saved each result one row at a time. Runs that had to be finished by a deadline instead ran until they gave up.',
     learnings:

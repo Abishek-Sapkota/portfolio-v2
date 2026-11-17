@@ -1,43 +1,27 @@
-import { useRef } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight, ChevronsDown, Download } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import DotField from '../components/DotField'
 import PageMeta from '../components/PageMeta'
 import ProjectCard from '../components/ProjectCard'
-import Reveal from '../components/Reveal'
 import { featuredProjects, profile } from '../data/portfolio'
 
-const heroFade = (delay=0) => ({ initial:{opacity:0,y:20}, animate:{opacity:1,y:0}, transition:{duration:.6,delay,ease:[.25,.46,.45,.94]} })
+const practice=['Django / DRF','PostgreSQL / Redis','JavaScript / React','AWS delivery']
+const method=['Clear models.','Small feedback loops.','Quality you can observe.']
 
 export default function Home(){
   const projects=featuredProjects
-  const heroRef=useRef(null)
-  const reduced=useReducedMotion()
-  const {scrollYProgress}=useScroll({target:heroRef,offset:['start start','end start']})
-  const headlineY=useTransform(scrollYProgress,[0,1],[0,reduced?0:-140])
-  const headlineOpacity=useTransform(scrollYProgress,[0,.85],[1,0])
-  const fieldScale=useTransform(scrollYProgress,[0,1],[1,reduced?1:1.15])
-  const [titleLine1,...titleRest]=profile.title.split(' ')
-  const titleLine2=titleRest.join(' ')
   return <><PageMeta title="Software Engineer" description={profile.tagline}/>
-  <section ref={heroRef} className="relative flex min-h-[calc(100vh-5rem)] flex-col items-center justify-center overflow-hidden bg-paper px-5 py-20 text-center text-ink sm:px-8">
-    <motion.div style={{scale:fieldScale}} className="pointer-events-none absolute inset-0 grid place-items-center opacity-[.16]"><DotField className="h-[90vmin] w-[90vmin] max-w-none"/></motion.div>
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgb(var(--paper))_72%)]"/>
-    <motion.div {...heroFade(0)} className="relative border border-ink/25 bg-ink px-4 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[.25em] text-paper">{profile.name}</motion.div>
-    <motion.div style={{y:headlineY,opacity:headlineOpacity}} className="relative mt-8">
-      <motion.h1 {...heroFade(.15)} className="display uppercase leading-[.85]">{titleLine1}<br/>{titleLine2}</motion.h1>
-    </motion.div>
-    <motion.p {...heroFade(.3)} className="relative mt-9 max-w-xl font-mono text-[11px] uppercase leading-6 tracking-[.18em] text-muted sm:text-xs">{profile.tagline}</motion.p>
-    <motion.div {...heroFade(.4)} className="relative mt-10 flex flex-wrap items-center justify-center gap-3">
-      <Link data-cursor="let's see" className="button" to="/projects">View work <ArrowRight size={16}/></Link>
-      <Link data-cursor="yay" className="button button-ghost" to="/contact">Start a conversation</Link>
-    </motion.div>
-    <motion.div {...heroFade(.55)} className="relative mt-16 flex flex-col items-center gap-2 font-mono text-[10px] uppercase tracking-[.3em] text-muted">
-      <span>Scroll to initiate</span>
-      <ChevronsDown className="animate-bounce" size={16}/>
-    </motion.div>
+  <section className="sheet bleed" style={{'--from':6}}>
+    <div className="bleed__field" aria-hidden="true"/>
+    <div className="container">
+      <h1 className="sheet__head overprint" data-text={profile.name}>{profile.name}</h1>
+      <div className="sheet__foot grid12">
+        <div className="sheet__copy">
+          <p className="lead">{profile.tagline}</p>
+          <div className="actions"><Link data-cursor="let's see" className="btn" to="/projects">View work</Link><Link data-cursor="yay" className="link" to="/contact">Start a conversation</Link></div>
+        </div>
+        <p className="sheet__figure"><span className="sheet__role">{profile.title}</span><b>{profile.years_of_experience}+</b><span>years in production</span></p>
+      </div>
+    </div>
   </section>
-  <section className="border-y border-line bg-ink text-paper"><div className="shell flex flex-wrap items-center justify-between gap-6 py-6"><span className="eyebrow !text-paper/60">Core practice</span><div className="flex flex-wrap gap-x-8 gap-y-3 font-mono text-xs uppercase tracking-widest"><span>Django / DRF</span><span>PostgreSQL / Redis</span><span>JavaScript / React</span><span>AWS delivery</span></div></div></section>
-  <section className="shell py-24 sm:py-36"><div className="mb-14 flex items-end justify-between border-b border-line pb-7"><div><span className="eyebrow">Selected work</span><h2 className="section-title mt-4">Built for the real world.</h2></div><Link to="/projects" data-cursor="more" className="eyebrow hidden items-center gap-2 hover:text-accent sm:flex">All projects <ArrowRight size={14}/></Link></div><div className="grid gap-5 md:grid-cols-2">{projects.slice(0,4).map((p,i)=><ProjectCard key={p.slug} project={p} index={i}/>)}</div></section>
-  <section className="shell"><Reveal className="grid gap-8 border-y border-line py-16 md:grid-cols-[.65fr_1.35fr]"><span className="eyebrow">How I work</span><div><p className="font-display text-3xl leading-tight sm:text-5xl">Clear models. Small feedback loops. Quality you can observe.</p><p className="prose-copy mt-8">I work end-to-end while keeping boundaries sharp: understand the workflow, model the domain, expose a dependable contract, then make the interface feel inevitable.</p><Link to="/about" data-cursor="who" className="button button-ghost mt-8">More about me <ArrowRight size={16}/></Link>{profile.resume&&<a href={profile.resume} data-cursor="grab it" className="button button-ghost ml-3 mt-8"><Download size={16}/> Resume</a>}</div></Reveal></section></> }
+  <section className="section" aria-labelledby="work-head"><div className="container"><div className="head-split"><h2 id="work-head">Selected work</h2><Link to="/projects" data-cursor="more" className="link">All projects</Link></div><ol className="index">{projects.slice(0,4).map(p=><li key={p.slug}><ProjectCard project={p}/></li>)}</ol></div></section>
+  <section className="field field--mark section--tight"><div className="container grid12 practice"><h2>Core practice</h2><ul className="practice__list">{practice.map(item=><li key={item}>{item}</li>)}</ul></div></section>
+  <section className="section"><div className="container grid12"><div className="method__head"><h2>How I work</h2><p className="lead">I like to work end to end. First I learn how people actually do the job, then I model the domain, put a stable API in front of it and build the screens on top.</p><div className="actions"><Link to="/about" data-cursor="who" className="link">More about me</Link>{profile.resume&&<a href={profile.resume} data-cursor="grab it" className="link">Resume</a>}</div></div><ol className="method__rows">{method.map(line=><li key={line}>{line}</li>)}</ol></div></section></> }

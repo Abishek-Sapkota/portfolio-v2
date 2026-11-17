@@ -4,7 +4,7 @@ import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-moti
 const DEFAULT_SIZE = 34
 const WORD_SIZE = 68
 const TEXT_SIZE = 46
-const INVERT_SELECTOR = '.button:not(.button-ghost), .bg-ink'
+const INVERT_SELECTOR = '.btn:not(.btn--accent), .field, .on-field'
 const INTERACTIVE_SELECTOR = 'a, button, [role="button"]'
 const TEXT_SELECTOR = 'p, h1, h2, h3, h4, h5, h6, li, blockquote, span, label, td, th'
 
@@ -60,21 +60,23 @@ export default function Cursor(){
 
   if (reduced || !active) return null
   const size = word ? WORD_SIZE : textMode ? TEXT_SIZE : DEFAULT_SIZE
-  const fill = invert ? 'rgb(var(--paper))' : 'rgb(var(--ink))'
-  const textColor = invert ? 'rgb(var(--ink))' : 'rgb(var(--paper))'
+  const fill = invert ? 'var(--color-paper)' : 'var(--color-ink)'
+  const textColor = invert ? 'var(--color-ink)' : 'var(--color-paper)'
+  // Sized by scale from one fixed box, so only transform and opacity animate.
+  const scale = size / WORD_SIZE
   return <>
     <motion.div aria-hidden="true" className="pointer-events-none fixed left-0 top-0 z-[999]" style={{ x: ringX, y: ringY }}>
       <motion.div
         className="grid place-items-center overflow-hidden rounded-full text-center"
-        animate={{ width: size, height: size, scale: pressed ? .85 : 1, backgroundColor: word ? fill : 'transparent', opacity: word ? .82 : 1, borderWidth: word || textMode ? 0 : 1.5 }}
+        animate={{ scale: scale * (pressed ? .85 : 1), opacity: word ? .82 : 1 }}
         transition={{ duration: .25, ease: [.25,.46,.45,.94] }}
-        style={{ translateX: '-50%', translateY: '-50%', borderStyle: 'solid', borderColor: fill, backdropFilter: textMode ? 'invert(1)' : 'none', WebkitBackdropFilter: textMode ? 'invert(1)' : 'none' }}
+        style={{ width: WORD_SIZE, height: WORD_SIZE, translateX: '-50%', translateY: '-50%', backgroundColor: word ? fill : 'transparent', borderWidth: word || textMode ? 0 : 1.5 / scale, borderStyle: 'solid', borderColor: fill, backdropFilter: textMode ? 'invert(1)' : 'none', WebkitBackdropFilter: textMode ? 'invert(1)' : 'none' }}
       >
-        {word && <span className="px-1.5 font-mono text-[10px] font-semibold uppercase leading-tight tracking-wide" style={{ color: textColor }}>{word}</span>}
+        {word && <span className="cursor__label" style={{ color: textColor }}>{word}</span>}
       </motion.div>
     </motion.div>
     {!word && !textMode && <motion.div aria-hidden="true" className="pointer-events-none fixed left-0 top-0 z-[999]" style={{ x, y }}>
-      <div className="-translate-x-1/2 -translate-y-1/2 size-[5px] rounded-full" style={{ backgroundColor: fill }} />
+      <div className="rounded-full" style={{ width: 5, height: 5, transform: 'translate(-50%, -50%)', backgroundColor: fill }} />
     </motion.div>}
   </>
 }
